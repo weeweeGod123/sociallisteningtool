@@ -1,0 +1,71 @@
+[
+  {
+    "_id": {
+      "$oid": "67c05a12c182a2cf3f9efa00"
+    },
+    "content": "Great results with new fungicide treatment against wheat. Crop health improved significantly! #Agriculture #Innovation",
+    "platform": "twitter",
+    "author": "FarmerJohn",
+    "timestamp": {
+      "$date": "2025-02-27T12:26:58.833Z"
+    },
+    "engagement": {
+      "likes": 45,
+      "replies": 12,
+      "shares": 8
+    },
+    "sentiment": {
+      "score": 0.1,
+      "label": "neutral",
+      "confidence": 0.1
+    },
+    "keywords": [
+      "wheat"
+    ],
+    "metadata": {
+      "language": "en",
+      "postUrl": "https://twitter.com/example/1"
+    },
+    "createdAt": {
+      "$date": "2025-02-27T12:26:58.945Z"
+    },
+    "updatedAt": {
+      "$date": "2025-02-27T12:26:58.945Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "67c05a12c182a2cf3f9efa01"
+    },
+    "content": "Pest infestation detected in corn field. Immediate action required. #Agriculture #PestControl",
+    "platform": "twitter",
+    "author": "AgroExpert",
+    "timestamp": {
+      "$date": "2025-02-27T12:30:00.000Z"
+    },
+    "engagement": {
+      "likes": 23,
+      "replies": 8,
+      "shares": 5
+    },
+    "sentiment": {
+      "score": -0.5,
+      "label": "negative",
+      "confidence": 0.8
+    },
+    "keywords": [
+      "corn",
+      "pest"
+    ],
+    "metadata": {
+      "language": "en",
+      "postUrl": "https://twitter.com/example/2"
+    },
+    "createdAt": {
+      "$date": "2025-02-27T12:30:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-02-27T12:30:00.000Z"
+    }
+  }
+] 

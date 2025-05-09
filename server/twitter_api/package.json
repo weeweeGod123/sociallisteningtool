@@ -1,0 +1,22 @@
+{
+  "name": "twitter-api-server",
+  "version": "1.0.0",
+  "description": "API server to interface with the Twitter scraper",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.1",
+    "express": "^4.21.2",
+    "node-fetch": "^2.7.0",
+    "python-shell": "^5.0.0",
+    "twitter-api-server": "file:"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "sentiment-analysis",
+  "version": "1.0.0",
+  "description": "Sentiment analysis service for agricultural text data",
+  "main": "topic_sentiment_analyzer.js",
+  "scripts": {
+    "analyze": "node topic_sentiment_analyzer.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "sentiment-analysis": "file:"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

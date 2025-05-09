@@ -1,0 +1,32 @@
+{
+    "name": "social-listening-platform",
+    "version": "1.0.0",
+    "description": "Social listening platform for Twitter and Reddit",
+    "scripts": {
+        "start": "concurrently \"npm run start:client\" \"npm run start:server\" \"npm run start:twitter-api\" \"npm run start:reddit-api\" \"npm run start:combined-api\"",
+        "start:client": "cd client && npm start",
+        "start:server": "cd server && npm start",
+        "start:twitter-api": "cd server/twitter_api && npm start",
+        "start:reddit-api": "cd server/reddit_api && npm start",
+        "start:combined-api": "cd server/combined_api && npm start",
+        "install:all": "npm install && npm run install:client && npm run install:server && npm run install:twitter-api && npm run install:reddit-api && npm run install:combined-api",
+        "install:client": "cd client && npm install",
+        "install:server": "cd server && npm install",
+        "install:twitter-api": "cd server/twitter_api && npm install",
+        "install:reddit-api": "cd server/reddit_api && npm install",
+        "install:combined-api": "cd server/combined_api && npm install"
+    },
+    "devDependencies": {
+        "concurrently": "^8.2.2"
+    },
+    "dependencies": {
+        "axios": "^1.8.4",
+        "chart.js": "^4.4.8",
+        "dotenv": "^16.5.0",
+        "mongodb": "^6.15.0",
+        "react-chartjs-2": "^5.3.0",
+        "react-toastify": "^11.0.5",
+        "bcrypt": "^5.1.1",
+        "social-listening-platform": "file:"
+    }
+}

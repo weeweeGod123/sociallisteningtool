@@ -1,0 +1,33 @@
+[
+  {
+    "timestamp": "2025-04-03 12:41:50",
+    "text": ".@GRDCWest Western Australian growers are urged to be on alert following the discovery of succinate dehydrogenase (SDHI, Group 7) resistance in spot form of net blotch (SFNB) in barley crops in the WA grainbelt \\|\\| #ausag #agchatoz @theCCDM  https://t.co/prrMsgVjFv ‚¨ÖÔ?è https://t.co/aASqIwxT1E",
+    "processed_text": "grdcwest western australian growers urged alert following discovery succinate dehydrogenase sdhi group resistance spot form net blotch sfnb barley crops wa grainbelt ausag agchatoz theccdm https co prrmsgvjfv öô https co aasqiwxt1e",
+    "categories": {},
+    "sentiment": {
+      "positive": 0.01931,
+      "negative": 0.17277,
+      "neutral": 0.80792,
+      "compound": -0.15346,
+      "sentiment": "Neutral",
+      "neutral_leaning": {
+        "direction": "negative",
+        "percentage": 15
+      }
+    },
+    "entities": [
+      {
+        "text": "spot",
+        "label": "DISEASE",
+        "start": 13,
+        "end": 14
+      },
+      {
+        "text": "barley",
+        "label": "CROP",
+        "start": 18,
+        "end": 19
+      }
+    ]
+  }
+]
