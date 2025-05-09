@@ -1,0 +1,147 @@
+/* =========================== */
+/*       Help Page Styles      */
+/* =========================== */
+
+.help-wrapper {
+  background-color: #f0f6fb;
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.help-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding-top: 20px;
+}
+
+/* Title */
+.help-container h1 {
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #0a2e5c; /* Deep AEGIC blue */
+}
+
+/* Card */
+.help-card {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Subheading */
+.help-card h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #1e293b;
+  text-align: left;
+}
+
+/* FAQ Container */
+.faq-item {
+  background-color: #dff2fb; /* Match AEGIC card color */
+  border: 1px solid #c5e4f3; /* Border like card edge */
+  border-radius: 10px;
+  margin-bottom: 14px;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+}
+
+/* FAQ Title */
+.faq-question {
+  padding: 16px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0a2e5c;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Arrow Icon */
+.toggle-icon {
+  font-size: 18px;
+  color: #197bbd;
+  transition: transform 0.3s ease;
+}
+
+.faq-item.open .toggle-icon {
+  transform: rotate(90deg);
+}
+
+/* FAQ Answer */
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-in-out;
+  padding: 0 20px;
+}
+
+.faq-item.open .faq-answer {
+  max-height: 300px;
+  margin-top: -8px;
+  font-size: 15px;
+  color: #333f4c;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* Contact Form */
+.help-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.help-form input,
+.help-form textarea {
+  padding: 14px;
+  font-size: 16px;
+  border: 1px solid #bcd5e7;
+  border-radius: 8px;
+  width: 100%;
+  outline: none;
+}
+
+.help-form input:focus,
+.help-form textarea:focus {
+  border-color: #197bbd;
+  box-shadow: 0 0 0 2px rgba(25, 123, 189, 0.2);
+}
+
+.help-form button {
+  padding: 14px;
+  font-size: 16px;
+  background-color: #197bbd;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.help-form button:hover {
+  background-color: #146298;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .help-card {
+    padding: 25px;
+  }
+
+  .help-container h1 {
+    font-size: 28px;
+  }
+
+  .help-card h2 {
+    font-size: 20px;
+  }
+}

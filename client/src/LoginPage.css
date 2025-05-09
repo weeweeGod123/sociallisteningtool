@@ -1,0 +1,286 @@
+/* LoginPage.css */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('./assets/Farm.jpg');
+  background-size: cover;
+  background-position: center;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Left Section (Image & Text) */
+.left-section {
+  display: none;
+}
+
+.background-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px;
+}
+
+.overlay h2 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.overlay h3 {
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffcc00;
+  margin-top: 5px;
+}
+
+.overlay p {
+  margin-top: 15px;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+/* Centered Login Form */
+.right-section {
+  width: 100%;
+  max-width: 450px;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(6px);
+}
+
+.right-section h2 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.right-section p {
+  font-size: 14px;
+  color: #666;
+  margin-top: 5px;
+}
+
+/* Input Fields */
+.input-group {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 12px;
+  border-radius: 5px;
+  margin-top: 15px;
+  background: white;
+  position: relative;
+}
+
+.input-group .icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+}
+
+.input-group input {
+  padding-left: 35px;
+  border: none;
+  outline: none;
+  flex: 1;
+}
+
+/* Forgot Password */
+.forgot-password {
+  display: block;
+  text-align: right;
+  margin-top: 5px;
+  font-size: 12px;
+  color: #04b054;
+  text-decoration: none;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+/* Login Button */
+.login-button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 20px;
+  background: #04b054;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  background: #04b054;
+}
+
+/* Remember Me */
+.remember-me {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.remember-me input {
+  margin-right: 10px;
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+  position: relative;
+}
+
+.divider hr {
+  flex: 1;
+  border: none;
+  height: 1px;
+  background: #ccc;
+}
+
+.or-text {
+  background: white;
+  padding: 0 10px;
+  color: #888;
+  font-size: 14px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Google Sign-In */
+.google-button {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.google-button:hover {
+  background: #f0f0f0;
+}
+
+.google-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+/* Sign Up Text */
+.signup-text {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.signup-text a {
+  color: #04b054;
+  text-decoration: none;
+}
+
+.signup-text a:hover {
+  text-decoration: underline;
+}
+
+/* Error message styling */
+.error-message {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 12px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  border-left: 4px solid #dc2626;
+}
+
+/* Link container styling - only add if not already in your CSS */
+.link-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+/* Style for disabled inputs during loading */
+input:disabled,
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Loading state for the login button */
+.login-button:disabled {
+  background-color: #93c5fd;
+  position: relative;
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.login-button:disabled::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  border: 3px solid transparent;
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s ease infinite;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .right-section {
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
+  }
+}

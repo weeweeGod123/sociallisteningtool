@@ -1,0 +1,588 @@
+// client/src/contexts/SessionContext.js
+import React, { createContext, useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+
+const SessionContext = createContext();
+
+const SESSION_TIMEOUT = 60 * 60 * 1000; // 60 minutes
+
+export const SessionProvider = ({ children }) => {
+    const [user, setUser] = useState(null);
+    const [token, setToken] = useState(localStorage.getItem('token'));
+    const [refreshToken, setRefreshToken] = useState(localStorage.getItem('refreshToken'));
+    const [expiresAt, setExpiresAt] = useState(localStorage.getItem('expiresAt'));
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [lastActivity, setLastActivity] = useState(Date.now());
+    const [sessionTimeout, setSessionTimeout] = useState(null);
+    const [logoutHandlers, setLogoutHandlers] = useState([]);
+
+    const registerLogoutHandler = (handler) => {
+        setLogoutHandlers(prev => [...prev, handler]);
+    };
+
+    // Helper function to fetch role permissions
+    const fetchRolePermissions = async (roleId) => {
+        try {
+            if (!roleId) return [];
+            
+            const roleResponse = await axios.get(`http://localhost:5003/api/roles/${roleId}`);
+            return roleResponse.data.permissions || [];
+        } catch (error) {
+            console.error('Error fetching role permissions:', error);
+            return [];
+        }
+    };
+
+    // Set up axios defaults
+    useEffect(() => {
+        if (token) 
+        {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        } 
+        else 
+        {
+            delete axios.defaults.headers.common['Authorization'];
+        }
+    }, [token]);
+
+     // Initialize session
+    useEffect(() => {
+        const initSession = async () => {
+            try {
+                setLoading(true);
+                
+                if (!token) 
+                {
+                    setUser(null);
+                    setLoading(false);
+                    return;
+                }
+                
+                // Validate token and get user info
+                try 
+                {
+                    console.log('Initializing session with token');
+                    const response = await axios.get('http://localhost:5003/api/auth/session');
+                    let userData = response.data.user;
+                    
+                    console.log('User data received from server:', userData);
+                    
+                    // Check if permissions were received from the server
+                    if (userData.permissions && Array.isArray(userData.permissions)) {
+                        console.log('Permissions received from server:', userData.permissions);
+                        // No need to fetch permissions separately, they're already included
+                    } else {
+                        console.log('No permissions received from server, using fallbacks');
+                        // If server didn't provide permissions, use fallbacks based on role
+                        if (userData.roleId) {
+                            const permissions = await fetchRolePermissions(userData.roleId);
+                            userData = {
+                                ...userData,
+                                permissions
+                            };
+                            console.log('Loaded user with permissions from API call:', permissions);
+                        } else if (userData.role === 'User') {
+                            // Default User role permissions if roleId is missing
+                            userData.permissions = ['advancedSearch', 'dashboard', 'help'];
+                            console.log('Applied default User permissions');
+                        } else if (userData.isAdmin) {
+                            // Default Admin permissions if roleId is missing
+                            userData.permissions = [
+                              'advancedSearch', 'dashboard', 'influencers', 'themes', 
+                              'engagement', 'geographical', 'source', 'sentiment', 
+                              'seasonal', 'help', 'settings'
+                            ];
+                            console.log('Applied default Admin permissions');
+                        } else {
+                            // No role assigned, use empty permissions
+                            userData.permissions = [];
+                            console.log('No role info found, using empty permissions');
+                        }
+                    }
+                    
+                    setUser(userData);
+                    updateActivity();
+                } 
+                catch (error) 
+                {
+                    console.error('Session validation error:', error);
+                    // Token might be expired, try to refresh
+                    if (refreshToken) 
+                    {
+                        await refreshSession();
+                    } 
+                    else 
+                    {
+                        // No refresh token, clear session
+                        logout();
+                    }
+                }
+            } 
+            catch (error) 
+            {
+                console.error('Session initialization error:', error);
+                setError(error.message);
+                logout();
+            } finally 
+            {
+                setLoading(false);
+            }
+        };
+        initSession();
+    }, []);
+
+    // Set up activity tracking
+    useEffect(() => {
+        // Track user activity to keep session alive
+        const activityEvents = ['mousedown', 'keydown', 'scroll', 'touchstart'];
+        
+        const handleActivity = () => 
+        {
+            updateActivity();
+        };
+        
+        // Add event listeners
+        activityEvents.forEach(event => 
+        {
+            window.addEventListener(event, handleActivity);
+        });
+        
+        // Clean up event listeners
+        return () => {
+            activityEvents.forEach(event => {
+                window.removeEventListener(event, handleActivity);
+            });
+        };
+    }, []);
+
+    // Check for session expiry
+    useEffect(() => {
+        if (!user) return;
+        
+        // Clear any existing timeout
+        if (sessionTimeout) 
+        {
+            clearTimeout(sessionTimeout);
+        }
+        
+        // Set timeout for session expiry
+        const timeout = setTimeout(() => 
+        {
+            const now = Date.now();
+            const timeSinceLastActivity = now - lastActivity;
+            
+            if (timeSinceLastActivity >= SESSION_TIMEOUT) 
+            {
+                // Session expired due to inactivity
+                console.log('Session expired due to inactivity');
+                logout();
+            }
+        }, SESSION_TIMEOUT);
+        
+        setSessionTimeout(timeout);
+        
+        // Clean up timeout on unmount
+        return () => {
+        if (sessionTimeout) {
+            clearTimeout(sessionTimeout);
+        }
+        };
+    }, [lastActivity, user]);
+
+    // Update last activity time
+    const updateActivity = () => {
+        setLastActivity(Date.now());
+        
+        // Periodically ping the server to update activity (every 5 minutes)
+        if (user && token && (Date.now() - lastActivity > 5 * 60 * 1000)) 
+        {
+            axios.get('http://localhost:5003/api/auth/session')
+                    .catch(error => {
+                    console.error('Error updating activity:', error);
+                    });
+        }
+    };
+
+    // Refresh session with refresh token
+    const refreshSession = async () => {
+        try 
+        {
+            if (!refreshToken) {
+                throw new Error('No refresh token available');
+            }
+            
+            const response = await axios.post('http://localhost:5003/api/auth/refresh', { refreshToken });
+            
+            // Update tokens
+            const { token: newToken, refreshToken: newRefreshToken, expiresAt: newExpiresAt } = response.data;
+            
+            // Save to state and localStorage
+            setToken(newToken);
+            setRefreshToken(newRefreshToken);
+            setExpiresAt(newExpiresAt);
+            
+            localStorage.setItem('token', newToken);
+            localStorage.setItem('refreshToken', newRefreshToken);
+            localStorage.setItem('expiresAt', newExpiresAt);
+            
+            // Update axios default header
+            axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+            
+            // Get user info with new token
+            const userResponse = await axios.get('http://localhost:5003/api/auth/session');
+            let userData = userResponse.data.user;
+            
+            // If user has a roleId, fetch role details including permissions
+            if (userData.roleId) {
+                const permissions = await fetchRolePermissions(userData.roleId);
+                userData = {
+                    ...userData,
+                    permissions
+                };
+                console.log('Refreshed user session with permissions:', permissions);
+            } else if (userData.role === 'User') {
+                // Default User role permissions if roleId is missing
+                userData.permissions = ['advancedSearch', 'dashboard', 'help'];
+                console.log('Applied default User permissions on refresh');
+            } else if (userData.isAdmin) {
+                // Default Admin permissions if roleId is missing
+                userData.permissions = [
+                  'advancedSearch', 'dashboard', 'influencers', 'themes', 
+                  'engagement', 'geographical', 'source', 'sentiment', 
+                  'seasonal', 'help', 'settings'
+                ];
+                console.log('Applied default Admin permissions on refresh');
+            } else {
+                // No role assigned, use empty permissions
+                userData.permissions = [];
+            }
+            
+            setUser(userData);
+            
+            return true;
+        } 
+        catch (error) 
+        {
+            console.error('Session refresh error:', error);
+            logout();
+            return false;
+        }
+    };
+
+    // Login function
+    const login = async (email, password) => {
+        try 
+        {
+            // Get device info
+            const deviceInfo = {
+                device: navigator.userAgent,
+                screenSize: `${window.screen.width}x${window.screen.height}`
+            };
+            
+            const response = await axios.post('http://localhost:5003/api/auth/login', {
+                email,
+                password,
+                deviceInfo
+            });
+            
+            let { token: newToken, refreshToken: newRefreshToken, expiresAt: newExpiresAt, user: userData } = response.data;
+            
+            console.log('Login successful, user data received:', userData);
+            
+            // Save tokens to localStorage
+            localStorage.setItem('token', newToken);
+            localStorage.setItem('refreshToken', newRefreshToken);
+            localStorage.setItem('expiresAt', newExpiresAt);
+            
+            // Set axios default header for next requests
+            axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+            
+            // Check if permissions were received from the server
+            if (userData.permissions && Array.isArray(userData.permissions)) {
+                console.log('Permissions received from login response:', userData.permissions);
+                // No need to fetch permissions separately, they're already included
+            } else {
+                console.log('No permissions in login response, using fallbacks');
+                // If server didn't provide permissions, use fallbacks based on role
+                if (userData.roleId) {
+                    const permissions = await fetchRolePermissions(userData.roleId);
+                    userData = {
+                        ...userData,
+                        permissions
+                    };
+                    console.log('Retrieved permissions for role:', permissions);
+                } else if (userData.role === 'User') {
+                    // Default User role permissions if roleId is missing
+                    userData.permissions = ['advancedSearch', 'dashboard', 'help'];
+                    console.log('Applied default User permissions on login');
+                } else if (userData.isAdmin) {
+                    // Default Admin permissions if roleId is missing
+                    userData.permissions = [
+                      'advancedSearch', 'dashboard', 'influencers', 'themes', 
+                      'engagement', 'geographical', 'source', 'sentiment', 
+                      'seasonal', 'help', 'settings'
+                    ];
+                    console.log('Applied default Admin permissions on login');
+                } else {
+                    // No role assigned, use empty permissions
+                    userData.permissions = [];
+                    console.log('No role information found, using empty permissions');
+                }
+            }
+            
+            // Update state
+            setToken(newToken);
+            setRefreshToken(newRefreshToken);
+            setExpiresAt(newExpiresAt);
+            setUser(userData);
+            updateActivity();
+            
+            // Add a forced UI refresh when needed
+            if (userData.role === 'User' && userData.permissions && userData.permissions.length > 3) {
+                console.log('User has more than default permissions, triggering UI refresh');
+                // We need to refresh the UI to make sure all permissions are applied
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
+            }
+            
+            return { success: true, user: userData };
+        } 
+        catch (error) 
+        {
+            console.error('Login error:', error);
+            setError(error.response?.data?.message || error.message);
+            return { success: false, error: error.response?.data?.message || error.message };
+        }
+    };
+
+     // Modify the logout function to notify all registered handlers
+     const logout = async () => {
+        try {
+            if (token && refreshToken) {
+                // Try to logout on the server
+                await axios.post('http://localhost:5003/api/auth/logout', { refreshToken })
+                .catch(error => console.error('Logout error:', error));
+            }
+        } finally {
+            // Clear tokens regardless of server response
+            localStorage.removeItem('token');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('expiresAt');
+            
+            // Clear state
+            setToken(null);
+            setRefreshToken(null);
+            setExpiresAt(null);
+            setUser(null);
+            
+            // Clear axios default header
+            delete axios.defaults.headers.common['Authorization'];
+            
+            // Clear timeout
+            if (sessionTimeout) {
+                clearTimeout(sessionTimeout);
+                setSessionTimeout(null);
+            }
+            
+            // Notify all registered logout handlers
+            logoutHandlers.forEach(handler => {
+                try {
+                    handler();
+                } catch (error) {
+                    console.error('Error in logout handler:', error);
+                }
+            });
+        }
+    };
+
+    // Get active sessions
+    const getActiveSessions = async () => {
+        try 
+        {
+            const response = await axios.get('http://localhost:5003/api/auth/sessions');
+            return response.data.sessions;
+        } 
+        catch (error) 
+        {
+            console.error('Error fetching active sessions:', error);
+            throw error;
+        }
+    };
+
+    // Terminate a session
+    const terminateSession = async (sessionId) => {
+        try 
+        {
+            const response = await axios.delete(`http://localhost:5003/api/auth/sessions/${sessionId}`);
+            return response.data;
+        } 
+        catch (error) 
+        {
+            console.error('Error terminating session:', error);
+            throw error;
+        }
+    };
+
+    // Check if token is about to expire and refresh if needed
+    const checkTokenExpiry = async () => {
+        if (!token || !expiresAt || !refreshToken) return;
+        
+        const expiryTime = new Date(expiresAt);
+        const now = new Date();
+        
+        // Refresh if less than 5 minutes until expiry
+        const fiveMinutes = 5 * 60 * 1000;
+        if (expiryTime - now < fiveMinutes) 
+        {
+            await refreshSession();
+        }
+    };
+
+    // Values provided by context
+    const value = {
+        user,
+        token,
+        loading,
+        error,
+        login,
+        registerLogoutHandler,
+        logout,
+        refreshSession,
+        updateActivity,
+        getActiveSessions,
+        terminateSession,
+        checkTokenExpiry,
+        isAuthenticated: !!user,
+        lastActivity,
+        // Demo login function for quick admin access
+        demoLogin: () => {
+            console.log('Demo login initiated');
+            
+            // Create a proper demo user with all required fields
+            const fullDemoUser = {
+                _id: "demo_user_id",
+                name: "Demo Admin",
+                email: "demo@example.com",
+                role: "Admin", // String role name, not an object
+                roleId: "admin_role_id", // Add a valid roleId to avoid [object Object]
+                isAdmin: true,
+                permissions: [
+                    'advancedSearch', 'dashboard', 'influencers', 'themes', 
+                    'engagement', 'geographical', 'source', 'sentiment', 
+                    'seasonal', 'help', 'settings', 'admin', 'roleManagement'
+                ],
+                lastActive: new Date().toISOString()
+            };
+            
+            console.log('Created demo admin user:', fullDemoUser);
+            
+            // Generate a fake token
+            const fakeToken = `demo_${Date.now()}`;
+            const fakeRefreshToken = `demo_refresh_${Date.now()}`;
+            const expiryDate = new Date();
+            expiryDate.setHours(expiryDate.getHours() + 24); // 24 hour expiry
+            const fakeExpiresAt = expiryDate.toISOString();
+            
+            // Set the demo user in state
+            setUser(fullDemoUser);
+            
+            // Set tokens
+            setToken(fakeToken);
+            setRefreshToken(fakeRefreshToken);
+            setExpiresAt(fakeExpiresAt);
+            
+            // Save to localStorage for persistence
+            localStorage.setItem('token', fakeToken);
+            localStorage.setItem('refreshToken', fakeRefreshToken);
+            localStorage.setItem('expiresAt', fakeExpiresAt);
+            localStorage.setItem('userRole', 'Admin'); // Update local storage for the UserContext
+            
+            // Set up axios headers
+            axios.defaults.headers.common['Authorization'] = `Bearer ${fakeToken}`;
+            
+            // Update activity timestamp
+            updateActivity();
+            
+            return true;
+        },
+        // Demo login function for quick admin access with improved error handling
+        demoLogin: () => {
+            try {
+                console.log('Demo login initiated');
+                
+                // Create a proper demo user with all required fields
+                const fullDemoUser = {
+                    _id: "demo_user_id",
+                    name: "Demo Admin",
+                    email: "demo@example.com",
+                    role: "Admin", // String role name, not an object
+                    roleId: "admin_role_id", // Add a valid roleId to avoid [object Object]
+                    isAdmin: true,
+                    permissions: [
+                        'advancedSearch', 'dashboard', 'influencers', 'themes', 
+                        'engagement', 'geographical', 'source', 'sentiment', 
+                        'seasonal', 'help', 'settings', 'admin', 'roleManagement'
+                    ],
+                    lastActive: new Date().toISOString()
+                };
+                
+                console.log('Created demo admin user:', fullDemoUser);
+                
+                // Generate a fake token
+                const fakeToken = `demo_${Date.now()}`;
+                const fakeRefreshToken = `demo_refresh_${Date.now()}`;
+                const expiryDate = new Date();
+                expiryDate.setHours(expiryDate.getHours() + 24); // 24 hour expiry
+                const fakeExpiresAt = expiryDate.toISOString();
+                
+                console.log('Setting user in state...');
+                // Set the demo user in state
+                setUser(fullDemoUser);
+                
+                console.log('Setting tokens in state...');
+                // Set tokens
+                setToken(fakeToken);
+                setRefreshToken(fakeRefreshToken);
+                setExpiresAt(fakeExpiresAt);
+                
+                console.log('Saving to localStorage...');
+                // Save to localStorage for persistence
+                localStorage.setItem('token', fakeToken);
+                localStorage.setItem('refreshToken', fakeRefreshToken);
+                localStorage.setItem('expiresAt', fakeExpiresAt);
+                localStorage.setItem('userRole', 'Admin'); // Update local storage for the UserContext
+                localStorage.setItem('isAuthenticated', 'true'); // Set isAuthenticated for App.js
+                
+                console.log('Setting up axios headers...');
+                // Set up axios headers
+                axios.defaults.headers.common['Authorization'] = `Bearer ${fakeToken}`;
+                
+                console.log('Updating activity timestamp...');
+                // Update activity timestamp
+                updateActivity();
+                
+                console.log('Demo login completed successfully');
+                return { success: true, user: fullDemoUser };
+            } catch (error) {
+                console.error('Demo login error:', error);
+                return { success: false, error: error.message || 'An unknown error occurred' };
+            }
+        }
+    };
+
+    return (
+        <SessionContext.Provider value={value}>
+            {children}
+        </SessionContext.Provider>
+    );
+};
+
+export const useSession = () => {
+    const context = useContext(SessionContext);
+    if (context === undefined) {
+        throw new Error('useSession must be used within a SessionProvider');
+    }
+    return context;
+};

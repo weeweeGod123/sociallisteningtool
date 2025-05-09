@@ -1,0 +1,189 @@
+/* SeasonalAnalysis.css - AEGIC Theme Update */
+
+.seasonal-container {
+  display: flex;
+  width: 100vw;
+  background-color: #f0f6fb;
+  min-height: 100vh;
+}
+
+.main-content {
+  transition: margin-left 0.3s ease;
+  padding: 20px;
+  flex: 1;
+}
+
+.main-content.sidebar-open {
+  margin-left: 220px;
+}
+
+.main-content.sidebar-collapsed {
+  margin-left: 60px;
+}
+
+.seasonal-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.seasonal-header h2 {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.subheading {
+  margin-left: 20px;
+  font-weight: 500;
+}
+
+.filters span {
+  margin: 0 10px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.filters .active {
+  border-bottom: 2px solid #0a2e5c;
+}
+
+.top-icons {
+  display: flex;
+  gap: 10px;
+}
+
+.season-blocks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.season-block {
+  flex: 1 1 22%;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+}
+
+.season-block h3 {
+  font-size: 14px;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.value {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.change {
+  font-size: 14px;
+}
+
+.change.red {
+  color: #dc2626;
+}
+
+.change.orange {
+  color: #ea580c;
+}
+
+.change.blue {
+  color: #007ac3;
+}
+
+.change.green {
+  color: #16a34a;
+}
+
+.chart-row {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.chart-box {
+  width: 100%;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+}
+
+.chart-box .filter-tags {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.chart-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #e1f0ff;
+  height: 160px;
+  border-radius: 6px;
+  font-weight: bold;
+  color: #0a2e5c;
+}
+
+.insight-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.insight-box,
+.trend-box {
+  flex: 1 1 48%;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  min-width: 300px;
+}
+
+.insight-box .insight {
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.summer-insight {
+  background-color: #fee2e2;
+}
+
+.autumn-insight {
+  background-color: #fef9c3;
+}
+
+.winter-insight {
+  background-color: #e0e7ff;
+}
+
+.spring-insight {
+  background-color: #dcfce7;
+}
+
+.trend-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.trend-box li {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-weight: 500;
+}
+
+.trend-box .positive {
+  color: #16a34a;
+}

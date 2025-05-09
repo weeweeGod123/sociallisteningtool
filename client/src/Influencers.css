@@ -1,0 +1,467 @@
+/* Influencers.css */
+/* Import base styles */
+@import './Dashboard.css';
+
+/* Influencers-specific styles */
+.influencers-page {
+  padding: 24px;
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 64px);
+}
+
+.influencer-title {
+  margin-bottom: 24px;
+}
+
+.influencer-title h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.influencers-container {
+  display: flex;
+  gap: 24px;
+}
+
+.influencer-content {
+  flex: 1;
+}
+
+.table-stats-container {
+  display: block;
+  width: 100%;
+}
+
+.influencers-table-section {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 100%;
+}
+
+.influencer-tabs {
+  padding: 16px 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.influencer-tab {
+  width: 100%;
+}
+
+.influencers-table {
+  overflow-x: auto;
+}
+
+.influencers-table table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.influencers-table th,
+.influencers-table td {
+  padding: 16px 24px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.influencers-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #4b5563;
+  font-size: 14px;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.influencers-table td {
+  font-size: 14px;
+  color: #1f2937;
+  vertical-align: top;
+}
+
+/* Column widths */
+.influencers-table th:nth-child(1),
+.influencers-table td:nth-child(1) {
+  width: 15%;
+  min-width: 120px;
+}
+
+.influencers-table th:nth-child(2),
+.influencers-table td:nth-child(2) {
+  width: 20%;
+  min-width: 180px;
+}
+
+.influencers-table th:nth-child(3),
+.influencers-table td:nth-child(3) {
+  width: 10%;
+  min-width: 100px;
+}
+
+.influencers-table th:nth-child(4),
+.influencers-table td:nth-child(4) {
+  width: 10%;
+  min-width: 100px;
+}
+
+.influencers-table th:nth-child(5),
+.influencers-table td:nth-child(5) {
+  width: 10%;
+  min-width: 80px;
+  text-align: right;
+}
+
+.influencers-table th:nth-child(6),
+.influencers-table td:nth-child(6) {
+  width: 10%;
+  min-width: 80px;
+  text-align: right;
+}
+
+.influencers-table th:nth-child(7),
+.influencers-table td:nth-child(7) {
+  width: 10%;
+  min-width: 100px;
+}
+
+.influencers-table th:nth-child(8),
+.influencers-table td:nth-child(8) {
+  width: 15%;
+  min-width: 120px;
+}
+
+.influencer-cell {
+  min-width: 200px;
+}
+
+.influencer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.influencer-name {
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.influencer-url {
+  font-size: 13px;
+  color: #6b7280;
+  word-break: break-all;
+}
+
+.influencer-url a {
+  color: #2563eb;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.influencer-url a:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+/* Stats Section */
+.stats-section {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.media-types {
+  text-align: center;
+}
+
+.media-types h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+}
+
+.pie-chart {
+  margin: 24px 0;
+  height: 200px;
+}
+
+.media-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+/* Network colors */
+td[data-network="Twitter"] {
+  color: #1DA1F2;
+}
+
+td[data-network="Reddit"] {
+  color: #FF4500;
+}
+
+td[data-network="Bluesky"] {
+  color: #0560FF;
+}
+
+/* Topic badges */
+.topic-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.topic-badge.technology {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.topic-badge.general {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.topic-badge.agriculture {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.topic-badge.politics {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.topic-badge.economy {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.topic-badge.education {
+  background-color: #e0e7ff;
+  color: #3730a3;
+}
+
+.topic-badge.environment {
+  background-color: #ccfbf1;
+  color: #0f766e;
+}
+
+.topic-badge.health {
+  background-color: #fae8ff;
+  color: #86198f;
+}
+
+/* Topic Filter styles */
+.topic-filters {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.topic-filter-button {
+  padding: 8px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  background: white;
+  color: #4b5563;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.topic-filter-button:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.topic-filter-button.active {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
+
+.topic-filter-button.active.technology {
+  background: #0369a1;
+  border-color: #0369a1;
+}
+
+.topic-filter-button.active.general {
+  background: #4b5563;
+  border-color: #4b5563;
+}
+
+.topic-filter-button.active.agriculture {
+  background: #166534;
+  border-color: #166534;
+}
+
+.topic-filter-button.active.politics {
+  background: #991b1b;
+  border-color: #991b1b;
+}
+
+.topic-filter-button.active.economy {
+  background: #92400e;
+  border-color: #92400e;
+}
+
+.topic-filter-button.active.education {
+  background: #3730a3;
+  border-color: #3730a3;
+}
+
+.topic-filter-button.active.environment {
+  background: #0f766e;
+  border-color: #0f766e;
+}
+
+.topic-filter-button.active.health {
+  background: #86198f;
+  border-color: #86198f;
+}
+
+.tab-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.tab-header span {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.limit-select-container {
+  display: flex;
+  align-items: center;
+}
+
+.limit-selector {
+  padding: 6px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: white;
+  color: #4b5563;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+  min-width: 100px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+  padding-right: 32px;
+}
+
+.limit-selector:hover {
+  border-color: #2563eb;
+}
+
+.limit-selector:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+/* Loading and Error states */
+.loading, .error {
+  text-align: center;
+  padding: 48px;
+  font-size: 16px;
+  color: #6b7280;
+}
+
+.error {
+  color: #dc2626;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .table-stats-container {
+    display: block;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .influencers-page {
+    padding: 16px;
+  }
+  
+  .influencers-table th,
+  .influencers-table td {
+    padding: 12px 16px;
+  }
+}
+
+.platform-filter {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.platform-button {
+  padding: 8px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  background-color: white;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.platform-button:hover {
+  background-color: #f8f9fa;
+  border-color: #3366ff;
+  color: #3366ff;
+}
+
+.platform-button.active {
+  background-color: #3366ff;
+  border-color: #3366ff;
+  color: white;
+}
+
+.top-influencer {
+  border: 2.5px solid #f7b801;
+  background: #fffbe6;
+  box-shadow: 0 2px 12px rgba(247, 184, 1, 0.08);
+}

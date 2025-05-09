@@ -1,0 +1,101 @@
+.sentiment-dashboard {
+  padding: 20px;
+  background-color: #f0f6fb; /* AEGIC light blue background */
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sentiment-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.sentiment-card {
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.positive {
+  background-color: #d4f3e3; /* AEGIC green tint */
+  color: #117a55;
+}
+
+.negative {
+  background-color: #fbe2e2; /* AEGIC red tint */
+  color: #b7282e;
+}
+
+.neutral {
+  background-color: #d9eaf7; /* Soft light blue background */
+  color: #0a2e5c;            /* Deep AEGIC blue for contrast */
+}
+
+.sentiment-value {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.sentiment-change {
+  font-weight: bold;
+}
+
+.positive-change {
+  color: #16a34a; /* Deep green */
+}
+
+.negative-change {
+  color: #dc2626; /* Deep red */
+}
+
+.trends-section,
+.sources-section {
+  background-color: white;
+  margin-top: 30px;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.trends-tabs {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.trends-tabs span {
+  cursor: pointer;
+}
+
+.source-bar {
+  margin-bottom: 20px;
+}
+
+.source-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.source-bar-container {
+  height: 10px;
+  background-color: #dbeafe; /* AEGIC light bar background */
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.source-bar-fill {
+  height: 100%;
+  border-radius: 5px;
+}

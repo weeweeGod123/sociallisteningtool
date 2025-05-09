@@ -1,0 +1,113 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.access-denied-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f9fafb;
+  padding: 20px;
+}
+
+.access-denied-page h1 {
+  color: #dc2626;
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+
+.access-denied-page p {
+  color: #4b5563;
+  font-size: 16px;
+  margin-bottom: 24px;
+  text-align: center;
+  max-width: 500px;
+}
+
+.access-denied-page button {
+  background-color: #1d4ed8;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.access-denied-page button:hover {
+  background-color: #1e40af;
+}
+
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  background-color: #f9fafb;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.loading-screen .spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #3366ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+.loading-screen p {
+  color: #4b5563;
+  font-size: 18px;
+  margin-top: 16px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

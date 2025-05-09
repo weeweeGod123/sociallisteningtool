@@ -1,0 +1,402 @@
+/* GeographicDistribution.css */
+/* Import base styles */
+@import './Dashboard.css';
+
+/* Geographic Distribution specific styles */
+.geographic-top-nav {
+  margin-bottom: 20px;
+}
+
+.geo-title-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 20px;
+}
+
+.geo-title-section h2 {
+  font-size: 24px;
+  color: #1E293B;
+  margin: 0;
+}
+
+.last-updated {
+  color: #64748B;
+  font-size: 14px;
+}
+
+.action-icons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: 15px;
+}
+
+.action-icon-button {
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.action-icon-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Content Layout */
+.geo-content {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 0 20px;
+}
+
+/* Card Styles */
+.geo-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* Disease Spread Card */
+.disease-spread-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.time-filters {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.time-filter {
+  background: none;
+  border: none;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.2s;
+}
+
+.time-filter.active {
+  color: #000;
+  font-weight: 500;
+  border-bottom: 2px solid #3366ff;
+}
+
+.filter-button {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.filter-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Map Styling */
+.map-container {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 500px;
+  background-color: #f8fafc;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.composable-map {
+  width: 100%;
+  height: 100%;
+  outline: none;
+}
+
+.geography {
+  fill: #e2e8f0;
+  stroke: #cbd5e1;
+  stroke-width: 0.5;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.geography:hover {
+  fill: #94a3b8;
+  cursor: pointer;
+}
+
+.geography.highlighted {
+  fill: #3b82f6;
+  stroke: #1d4ed8;
+}
+
+/* Tooltip styles */
+.tooltip {
+  position: fixed;
+  background: #1e293b;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  pointer-events: none;
+  z-index: 1000;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transform: translate(-50%, -100%);
+  transition: all 0.1s ease-out;
+  white-space: nowrap;
+  margin-top: -15px;
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px 5px 0;
+  border-style: solid;
+  border-color: #1e293b transparent transparent;
+}
+
+/* Loading state */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+}
+
+.loading::after {
+  content: '';
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e2e8f0;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error state */
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  background-color: #fee2e2;
+  color: #dc2626;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.error svg {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+}
+
+/* Map Legend */
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  margin: 32px auto 0 auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  max-width: fit-content;
+  z-index: 10;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #475569;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #f8fafc;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.legend-color.low {
+  background-color: #93c5fd;
+}
+
+.legend-color.medium {
+  background-color: #60a5fa;
+}
+
+.legend-color.high {
+  background-color: #2563eb;
+}
+
+.legend-color.critical {
+  background-color: #1e3a8a;
+}
+
+/* Stats Cards */
+.geo-stats-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.stats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.stat-item:last-child {
+  border-bottom: none;
+}
+
+.stat-label {
+  font-size: 15px;
+  color: #333;
+}
+
+.stat-value {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Alert Level Colors */
+.alert-levels-card .stat-value:nth-child(1) {
+  color: #f44336; /* Red for Critical */
+}
+
+.alert-levels-card .stat-value:nth-child(2) {
+  color: #ff9800; /* Orange for High */
+}
+
+.alert-levels-card .stat-value:nth-child(3) {
+  color: #ffc107; /* Yellow for Moderate */
+}
+
+.alert-levels-card .stat-value:nth-child(4) {
+  color: #4caf50; /* Green for Low */
+}
+
+/* Responsive Styles */
+@media (max-width: 1100px) {
+  .geo-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .geo-stats-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .geo-stats-column {
+    grid-template-columns: 1fr;
+  }
+  
+  .time-filters {
+    flex-wrap: wrap;
+  }
+  
+  .time-filter {
+    flex: 1;
+    min-width: 90px;
+    text-align: center;
+  }
+  
+  .filter-button {
+    margin-top: 10px;
+  }
+  
+  .map-legend {
+    flex-direction: row;
+    padding: 12px;
+    gap: 8px;
+    margin: 16px auto;
+    width: 90%;
+  }
+
+  .legend-item {
+    font-size: 12px;
+    padding: 3px 6px;
+  }
+
+  .legend-color {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #F8FAFC;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* Remove old gradient legend styles */
+.map-legend-gradient,
+.legend-gradient-bar,
+.legend-label,
+.legend-ticks {
+  display: none !important;
+}

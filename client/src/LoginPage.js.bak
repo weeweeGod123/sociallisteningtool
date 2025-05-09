@@ -1,0 +1,235 @@
+// LoginPage.js
+import React, { useState, useContext } from "react";
+import "./LoginPage.css";
+import { FaEnvelope, FaLock } from "react-icons/fa";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useSession } from "./contexts/SessionContext";
+
+// Import local images
+// Note: You might need to adjust these imports based on your project structure
+import farmImage from "./assets/Farm.jpg";
+import googleLogo from "./assets/Google.jpg";
+
+export default function LoginPage({ onLogin }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { login, setUser } = useSession();
+  
+  // Get the App's AuthContext from parent scope rather than importing
+  const authContext = useContext(React.createContext({}));
+  const setIsAuthenticated = authContext.setIsAuthenticated;
+
+  // Get the return URL from location state or default to advanced search
+  const from = location.state?.from || "/advanced-search";
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    
+    // Basic form validation
+    if (!email || !password) {
+      setError("Please enter both email and password");
+      return;
+    }
+    
+    try {
+      setLoading(true);
+      setError("");
+      
+      const result = await login(email, password);
+      
+      if (result.success) {
+        // Set authentication in both contexts for compatibility
+        if (setIsAuthenticated) {
+          setIsAuthenticated(true);
+        }
+        
+        // Call the onLogin prop for backward compatibility
+        if (onLogin) onLogin();
+        
+        // Navigate to the requested page or dashboard
+        navigate(from, { replace: true });
+      } else {
+        setError(result.error || "Login failed. Please check your credentials.");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("An unexpected error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Demo mode login (with admin permissions)
+  const handleDemoLogin = async () => {
+    try {
+      setLoading(true);
+      setError("");
+      
+      // Create a demo admin user in session
+      const demoAdmin = {
+        name: "Demo Admin",
+        email: "demo@example.com",
+        role: "Admin",
+        isAdmin: true,
+        permissions: [
+          'advancedSearch', 'dashboard', 'influencers', 'themes', 
+          'engagement', 'geographical', 'source', 'sentiment', 
+          'seasonal', 'help', 'settings', 'admin'
+        ],
+        // Add roleId to avoid [object Object] display
+        roleId: "admin_role_id"
+      };
+      
+      // Use the new demoLogin function
+      login.demoLogin(demoAdmin);
+      
+      // Set authentication in context
+      if (setIsAuthenticated) {
+        setIsAuthenticated(true);
+      }
+      
+      // Call the onLogin prop for backward compatibility
+      if (onLogin) onLogin();
+      
+      // Navigate to the dashboard
+      navigate("/dashboard", { replace: true });
+    } catch (err) {
+      console.error("Demo login error:", err);
+      setError("An error occurred during demo login.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="container">
+      {/* Left Section with Image and Text */}
+      <div className="left-section">
+        <img src={farmImage} alt="Farm" className="background-image" />
+        <div className="overlay">
+          <h2>Social Listening</h2>
+          <h3>Crop Diseases</h3>
+          <p>
+            Back to the watch, <br />
+            Review the alerts, <br />
+            Understand the shifts, <br />
+            And continue the mission!
+          </p>
+        </div>
+      </div>
+
+      {/* Right Section - Login Form */}
+      <div className="right-section">
+        <h2>Welcome Back!</h2>
+        <p>Continue with Google or enter your details.</p>
+
+        {/* Error message display */}
+        {error && (
+          <div className="error-message">
+            {error}
+          </div>
+        )}
+
+        {/* Demo Mode Button - Added for quick access */}
+        <button 
+          onClick={handleDemoLogin}
+          style={{
+            width: '100%',
+            padding: '12px',
+            marginBottom: '15px',
+            background: '#4CAF50',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+            fontSize: '16px',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          ⭐ Demo Mode - Skip Login ⭐
+        </button>
+
+        <form onSubmit={handleLogin}>
+          {/* Email Input */}
+          <div className="input-group">
+            <FaEnvelope className="icon" />
+            <input 
+              type="email" 
+              placeholder="Enter your email" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={loading}
+            />
+          </div>
+
+          {/* Password Input */}
+          <div className="input-group">
+            <FaLock className="icon" />
+            <input 
+              type="password" 
+              placeholder="Enter your password" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
+            />
+          </div>
+
+          {/* Forgot Password Link */}
+          <div className="link-container">
+            <Link to="/forgot-password" className="forgot-password">
+              Forgot password?
+            </Link>
+          </div>
+
+          {/* Login Button */}
+          <button 
+            type="submit" 
+            className="login-button"
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "Log in"}
+          </button>
+
+          {/* Remember Me Checkbox */}
+          <div className="remember-me">
+            <input 
+              type="checkbox" 
+              id="remember" 
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              disabled={loading}
+            />
+            <label htmlFor="remember">Remember Me</label>
+          </div>
+        </form>
+
+        {/* Divider */}
+        <div className="divider">
+          <hr />
+          <span className="or-text">Or</span>
+          <hr />
+        </div>
+
+        {/* Google Sign In */}
+        <button className="google-button" disabled={loading}>
+          <img src={googleLogo} alt="Google" className="google-icon" />
+          Sign in with Google
+        </button>
+
+        {/* Sign Up Link */}
+        <p className="signup-text">
+          Don't have an account?{" "}
+          <Link to="/sign-up" className="signup-link">Sign up here</Link>
+        </p>
+      </div>
+    </div>
+  );
+}
